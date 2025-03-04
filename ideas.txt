@@ -1,0 +1,25 @@
+Gestión de Productos (Finalizado)
+Modelo de productos con nombre, descripción, precio, imágenes y stock.
+Panel para agregar, editar y eliminar productos.
+
+Carrito de Compras
+Permitir agregar y eliminar productos.
+Guardar el carrito en el estado de Vue o en la base de datos.
+
+Órdenes y Checkout
+Proceso de compra con dirección de envío y método de pago.
+Guardar órdenes en la base de datos.
+
+Usuarios y Roles (LISTO)
+Cliente vs. administrador (para gestionar productos y pedidos).
+
+Métodos de Pago
+Implementar una pasarela de pago (ej. Stripe o MercadoPago).
+
+Seguridad y Autenticación (LISTO)
+Proteger rutas según el rol del usuario.
+Validaciones en el backend.
+
+Experiencia de Usuario
+Diseño limpio con PrimeVue y Tailwind.
+Notificaciones (éxito, error) al realizar acciones.
