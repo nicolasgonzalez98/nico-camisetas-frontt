@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, watch, nextTick } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import { useProductStore } from '@/stores/productStore';
     import InputText from 'primevue/inputtext';
@@ -21,7 +21,8 @@
         name: '',
         description: '',
         price: null,
-        stock: null
+        stock: null,
+        imageUrls: []
     });
 
     //AWS
@@ -51,41 +52,67 @@
         try {
           
           await s3Client.send(new PutObjectCommand(params));
-          imageUrls.value = [...imageUrls.value, { url: `https://${import.meta.env.VITE_AWS_BUCKET_NAME}.s3.amazonaws.com/${fileName}` }];
-          
+          imageUrls.value = [...imageUrls.value, { url: encodeURI(`https://${import.meta.env.VITE_AWS_BUCKET_NAME}.s3.amazonaws.com/${fileName}`) }];
+          selectedFile.value = null;
+
         } catch (error) {
           console.error("Error al subir la imagen", error);
         }
     };
 
-// Cargar datos si estamos editando
+    // Eliminar imagen
+    const removeImage = (index) => {
+      imageUrls.value.splice(index, 1);
+    };
+
+    // Cargar datos si estamos editando
     onMounted(async () => {
-
-
         if (route.params.id) {
             isEditing.value = true;
             const existingProduct = await productStore.fetchProductById(route.params.id);
             
-            if (existingProduct) {
-                product.value = { ...existingProduct };
+            if (existingProduct.images) {
+              imageUrls.value = existingProduct.images.map(url => ({ url }));
+            }
+
+            //console.log(imageUrls.value)
+            product.value = {
+              name: existingProduct.name,
+              description: existingProduct.description,
+              price: existingProduct.price,
+              stock: existingProduct.stock,
+              imageUrls: imageUrls.value    
             }
         }
 
-        Sortable.create(listRef.value, {
-          animation: 150,
-          ghostClass: 'blue-background-class',
-          filter: '.quieto'
-        });
+        await nextTick();  
+        
+        if (listRef.value) {
+            Sortable.create(listRef.value, {
+                animation: 150,
+                ghostClass: 'blue-background-class',
+                filter: '.quieto'
+            });
+        }
+
     });
 
     const saveProduct = async () => {
-    if (isEditing.value) {
+      //product.value = JSON.parse(JSON.stringify(product.value))
+      if (isEditing.value) {
+        console.log(product.value)
         await productStore.updateProduct(route.params.id, product.value);
-    } else {
+      } else {
+        console.log(product.value)
         await productStore.addProduct(product.value);
-    }
-    router.push('/admin');
+      }
+      router.push('/admin');
     };
+
+    watch(imageUrls, (newImages) => {
+        product.value.imageUrls = newImages;
+    }, { deep: true });
+
 </script>
 
 <template>
@@ -117,8 +144,16 @@
           <label>Fotos</label>
           <div class="mb-1 flex flex-wrap gap-2">
               <div ref="listRef" class="mb-2 flex flex-wrap gap-2">
-                <div v-for="(img, index) in imageUrls" :key="index" >
+                <div v-for="(img, index) in imageUrls" :key="index" class="relative group">
                   <img :src="img.url" alt="Imagen subida" width="150" class="rounded-lg w-24 h-24"/>
+                  <!-- Botón de eliminar (X) -->
+                  <button 
+                    @click.prevent="removeImage(index)"
+                    class="absolute top-0 right-0 bg-black-500 text-white w-6 h-6 flex items-center justify-center rounded-full 
+                          text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                    >
+                    ✕
+                  </button>
                 </div>
                 <label className="w-24 h-24 text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white cursor-pointer shadow-sm
                           border border-primary quieto">

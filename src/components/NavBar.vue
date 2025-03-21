@@ -16,7 +16,7 @@
         console.error('Error en el registro:', error);
       }
     };
-
+    
 </script>
 
 <template>

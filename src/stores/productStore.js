@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import axiosAuth from "../axiosAuth.js";
 import axios from "axios";
 
+
 export const useProductStore = defineStore("product", {
     state: () => ({
       products: [],
@@ -32,13 +33,24 @@ export const useProductStore = defineStore("product", {
       ,
   
       async addProduct(productData) {
-        try {
-          await axios.post("http://127.0.0.1:8000/api/products", productData);
-          await this.fetchProducts(); // Actualizar lista después de agregar
-        } catch (error) {
-          this.productErrors = error.response?.data.errors || "Error desconocido";
-        }
-      },
+            try {
+                //productData = JSON.parse(JSON.stringify(productData));
+                
+                await axios.post("http://127.0.0.1:8000/api/products", productData);
+                await this.fetchProducts(); // Actualizar lista después de agregar
+            } catch (error) {
+                if (error.response) {
+                    console.error("Error en la respuesta del servidor:", error.response.data);
+                    this.productErrors = error.response.data.errors || error.response.data.message || "Error desconocido";
+                } else if (error.request) {
+                    console.error("No hubo respuesta del servidor:", error.request);
+                    this.productErrors = "No se recibió respuesta del servidor.";
+                } else {
+                    console.error("Error al procesar la solicitud:", error.message);
+                    this.productErrors = error.message;
+                }
+            }
+        },
   
       async updateProduct(productId, updatedData) {
         try {
