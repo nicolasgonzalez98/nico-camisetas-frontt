@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import axiosAuth from "../axiosAuth.js";
 import axios from "axios";
 
 
@@ -34,7 +33,6 @@ export const useProductStore = defineStore("product", {
   
       async addProduct(productData) {
             try {
-                //productData = JSON.parse(JSON.stringify(productData));
                 
                 await axios.post("http://127.0.0.1:8000/api/products", productData);
                 await this.fetchProducts(); // Actualizar lista después de agregar

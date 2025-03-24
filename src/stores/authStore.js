@@ -70,6 +70,13 @@ export const userAuthStore = defineStore('auth',{
                 delete axios.defaults.headers.common["Authorization"];
             } catch (error) {
                 console.error('Error al cerrar sesión:', error);
+            } finally{
+                this._authUser = null;
+                this._authToken = null;
+        
+                localStorage.removeItem("authUser");
+                localStorage.removeItem("auth_token"); // Elimina el token almacenado
+                delete axios.defaults.headers.common["Authorization"];
             }
         },
         async fetchUser() {

@@ -8,7 +8,7 @@
     const isMenuOpen = ref(false);
 
     const logOut = async () => {
-      console.log("Hola")
+      
       try {
         await authStore.logOut();
         router.push('/login');
@@ -24,7 +24,7 @@
       <div class="container mx-auto flex justify-between items-center">
         <!-- Logo -->
         <router-link to="/" class="flex items-center gap-2">
-            <img src="../../public/src/assets/nico_camisetas.png" alt="Logo" class="w-8 h-8" />
+            <img src="/src/assets/nico_camisetas.png" alt="Logo" class="w-8 h-8" />
             <span class="text-xl font-bold">Nico Camisetas</span> 
         </router-link>
   
