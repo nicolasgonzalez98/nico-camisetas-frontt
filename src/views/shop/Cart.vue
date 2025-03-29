@@ -3,11 +3,17 @@
     import { useCartStore } from '@/stores/cartStore';
     import Button from 'primevue/button';
     import Card from 'primevue/card';
-    import InputNumber from 'primevue/inputnumber';
+    import { useRouter } from 'vue-router';
+  
 
     const cartStore = useCartStore();
+    const router = useRouter();
     const cartItems = computed(() => cartStore.cart);
     const total = computed(() => cartStore.cartTotal);
+
+    const goToCheckout = () => {
+      router.push('/checkout');
+    };
 </script>
 
 <template>
@@ -18,21 +24,25 @@
         <template #content>
             <div>
                 <h2 class="text-lg font-semibold">{{ item.name }}</h2>
-                <p class="text-gray-600">${{ item.price }}</p>
+                <p class="text-gray-600">${{ parseFloat(item.price) }}</p>
             </div>
         </template>
         <template #footer>
-            <!-- <div class="flex items-center space-x-2">
-                <Button icon="pi pi-minus" @click="cartStore.decreaseQuantity(item.id)" outlined />
-                <InputNumber v-model="item.quantity" class="w-16" />
-                <Button icon="pi pi-plus" @click="cartStore.increaseQuantity(item.id)" outlined />
+            <div class="flex items-center space-x-2">
                 <Button icon="pi pi-trash" @click="cartStore.removeFromCart(item.id)" severity="danger" />
-            </div> -->
+            </div>
         </template>
       </Card>
       <div class="text-right text-xl font-bold mt-4">
         Total: ${{ total }}
       </div>
+
+      <button 
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        @click="goToCheckout"
+      >
+        Proceder al Pago
+      </button>
     </div>
     <div v-else class="text-center text-gray-500">
       No hay productos en el carrito.

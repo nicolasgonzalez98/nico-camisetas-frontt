@@ -1,11 +1,15 @@
 <script setup>
     import { useRouter } from "vue-router";
     import { userAuthStore } from "../stores/authStore";
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
+import { useCartStore } from "@/stores/cartStore";
 
     const router = useRouter();
     const authStore = userAuthStore();
     const isMenuOpen = ref(false);
+
+    const cartStore = useCartStore();
+    const cartItemCount = computed(() => cartStore.totalItems);
 
     const logOut = async () => {
       
@@ -36,9 +40,25 @@
           <router-link v-if="authStore.isAdmin" to="/admin" class="hover:underline">
             Panel de Admin
           </router-link>
+
+          <router-link to="/mi-carrito" class="relative">
+            <i class="pi pi-shopping-cart" style="font-size: 1.5rem;"></i>
+            <span v-if="cartItemCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              {{ cartItemCount }}
+            </span>
+          </router-link>
   
           <button @click="logOut" class="hover:underline cursor-pointer">Cerrar Sesión</button>
         </div>
       </div>
     </nav>
   </template>
+
+  <style scoped>
+    .relative {
+      position: relative;
+    }
+    .absolute {
+      position: absolute;
+    }
+  </style>
