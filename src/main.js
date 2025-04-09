@@ -82,7 +82,7 @@ app.use(pinia)
     .directive('focustrap', FocusTrap)
     .directive('tooltip', Tooltip)
     .component('Buttom',Button)
-    //.component("Toast", Toast)
+    .component("Toast", Toast)
     .component('Dropdown',Dropdown)
     .mount('#app');
 

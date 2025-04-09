@@ -7,7 +7,7 @@ export const useCartStore = defineStore("cart", {
     state: () => ({
         cart: JSON.parse(localStorage.getItem("cart")) || [],
         cartErrors: null,
-        
+        total: 0,
     }),
 
     getters: {
@@ -46,5 +46,36 @@ export const useCartStore = defineStore("cart", {
         saveCart() {
           localStorage.setItem("cart", JSON.stringify(this.cart));
         },
+        async checkout(orderData) {
+            console.log(orderData)
+      
+            try {
+              const payload = {
+                name: orderData.name,
+                email: orderData.email,
+                address: orderData.address,
+                items: this.cart.map(item => ({
+                  product_id: item.id,
+                  quantity: item.quantity,
+                })),
+                total: this.total
+              }
+              console.log(payload)
+              const response = await axios.post('http://127.0.0.1:8000/api/orders', payload)
+      
+              // Vaciar carrito después del checkout exitoso
+              this.cartItems = []
+              this.total = 0
+      
+              
+      
+              return response.data
+      
+            } catch (error) {
+              console.log(error)
+              
+              throw error
+            }
+          }
       },
 })

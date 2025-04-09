@@ -38,7 +38,7 @@
       </div>
 
       <button 
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
         @click="goToCheckout"
       >
         Proceder al Pago
