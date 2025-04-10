@@ -20,18 +20,26 @@ const base_url = computed( () => {
 })
 
 const axiosAuth = axios.create({
-    baseURL: base_url.value,
+    baseURL: 'http://127.0.0.1:8000/api',
+    withCredentials: true,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
 })
 axiosAuth.defaults.headers.common['Accept'] = 'application/json'
 axiosAuth.defaults.headers.common['Content-Type'] = 'application/json'
-axiosAuth.defaults.headers.common['X-Requested-with'] = 'XMLHttpRequest'
+axiosAuth.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 
 
 axiosAuth.interceptors.request.use(config =>{
-    const userStore = userAuthStore();
-    config.headers.Authorization = 'Bearer ' + userStore.authToken;
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
 
     return config;
 })
+
 export default axiosAuth

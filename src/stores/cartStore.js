@@ -60,8 +60,8 @@ export const useCartStore = defineStore("cart", {
                 })),
                 total: this.total
               }
-              console.log(payload)
-              const response = await axios.post('http://127.0.0.1:8000/api/orders', payload)
+              
+              const response = await axiosAuth.post('/orders', payload)
       
               // Vaciar carrito después del checkout exitoso
               this.cartItems = []

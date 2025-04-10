@@ -35,18 +35,30 @@
 
     const products = ref([]);
     const searchQuery = ref('');
+    const loading = ref(false)
 
-  onMounted(async () => {
-    await productStore.fetchProducts()
-    products.value = productStore.products
-  });
+    onMounted(async () => {
+      console.log("HOLA")
+      loading.value = true
+      console.log(authStore.authToken)
+      if (authStore.authToken) {
+        console.log("HOLA!!!")
+        await productStore.fetchProducts()
+        .then(() => {
+          products.value = productStore.products
+          loading.value = false
+        });
+        
+      }
+      
+    });
 
   // Filtrar productos por búsqueda
-    const filteredProducts = computed(() => {
-      return products.value.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-      );
-  });
+      const filteredProducts = computed(() => {
+        return products.value.filter((product) =>
+          product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+    });
 
   //Agregar productos al carrito
 
@@ -64,8 +76,10 @@
     
     <!-- Barra de búsqueda -->
     <InputText v-model="searchQuery" placeholder="Buscar productos..." class="w-full mb-6 p-2 border rounded" />
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div v-if="loading">Cargando...</div>
+    <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+    
       <Card v-for="product in filteredProducts" :key="product.id" class="shadow-md rounded-lg p-1 transition-all hover:shadow-lg hover:scale-105 duration-300">
         
        <template #header>

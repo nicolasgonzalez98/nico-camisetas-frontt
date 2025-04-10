@@ -18,9 +18,9 @@
 
     const logIn = async () => {
         try {
-            console.log("Hola")
+            
             await authStore.logIn(form)
-            .finally(router.push('/'))
+            .then(router.push('/'))
             
         } catch (error) {
             console.error('Error en el registro:', error);
