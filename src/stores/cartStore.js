@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axiosAuth from "../axiosAuth.js";
-import axios from "axios";
+
 
 
 export const useCartStore = defineStore("cart", {
@@ -47,7 +47,6 @@ export const useCartStore = defineStore("cart", {
           localStorage.setItem("cart", JSON.stringify(this.cart));
         },
         async checkout(orderData) {
-            console.log(orderData)
       
             try {
               const payload = {

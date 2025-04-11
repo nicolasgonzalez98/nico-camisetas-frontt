@@ -38,18 +38,18 @@
     const loading = ref(false)
 
     onMounted(async () => {
-      console.log("HOLA")
+      
       loading.value = true
-      console.log(authStore.authToken)
-      if (authStore.authToken) {
-        console.log("HOLA!!!")
-        await productStore.fetchProducts()
-        .then(() => {
-          products.value = productStore.products
-          loading.value = false
-        });
+      
+      
         
-      }
+      await productStore.fetchProducts()
+      .then(() => {
+        products.value = productStore.products
+        loading.value = false
+      });
+        
+      
       
     });
 
