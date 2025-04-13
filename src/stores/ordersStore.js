@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axiosAuth from 'axios'
+import axiosAuth from '@/axiosAuth'
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
@@ -11,13 +11,25 @@ export const useOrdersStore = defineStore('orders', {
             this.loading = true
             
             try {
-                const res = await axiosAuth.get('/api/orders')
+                const res = await axiosAuth.get('/orders')
+                console.log('Respuesta del backend:', res.data)
                 this.orders = res.data
             } catch (error) {
                 console.error('Error al obtener órdenes:', error)
             } finally {
                 this.loading = false
             }
-        }
+        },
+        async confirmOrder(orderId) {
+            try {
+              await axiosAuth.post(`/orders/${orderId}/confirm`)
+              const order = this.orders.find(o => o.id === orderId)
+              if (order) {
+                order.status = 'confirmed'
+              }
+            } catch (error) {
+              console.error('Error al confirmar la orden:', error)
+            }
+          }          
         }
 })
