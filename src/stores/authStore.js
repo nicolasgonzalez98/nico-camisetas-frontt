@@ -39,7 +39,6 @@ export const userAuthStore = defineStore('auth',{
         async logIn(formData){
             this._authErrors = null;
             
-
             try {
                 const response = await axiosAuth.post('/login', formData);
 
@@ -57,6 +56,8 @@ export const userAuthStore = defineStore('auth',{
                 } else {
                     console.error('Error desconocido:', error);
                 }
+
+                throw error;
             }
         },
         async logOut() {

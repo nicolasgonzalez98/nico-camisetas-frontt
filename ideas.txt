@@ -23,3 +23,5 @@ Validaciones en el backend.
 Experiencia de Usuario
 Diseño limpio con PrimeVue y Tailwind.
 Notificaciones (éxito, error) al realizar acciones.
+
+Sistema de roles

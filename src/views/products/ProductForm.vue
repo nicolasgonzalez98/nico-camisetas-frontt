@@ -134,7 +134,7 @@
           </div>
           <div>
             <label class="text-sm">Precio</label>
-            <InputNumber v-model="product.price" class="w-full" mode="currency" currency="USD" />
+            <InputNumber v-model="product.price" class="w-full" prefix="$" />
           </div>
           <div>
             <label class="text-sm">Stock</label>

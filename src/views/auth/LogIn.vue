@@ -7,9 +7,13 @@
     import Password from 'primevue/password';
     import Button from 'primevue/button';
     import Card from 'primevue/card';
+    import Toast from 'primevue/toast';
+    import { useToast } from 'primevue/usetoast';
 
     const authStore = userAuthStore()
     const router = useRouter()
+
+    const toast = useToast()
 
     const form = reactive({
         email: '',
@@ -20,16 +24,24 @@
         try {
             
             await authStore.logIn(form)
-            .then(router.push('/'))
+            router.push('/')
             
         } catch (error) {
-            console.error('Error en el registro:', error);
+            
+            toast.add({
+            severity: 'error',
+            summary: 'Error al iniciar sesión',
+            detail: 'Correo o contraseña incorrectos.',
+            life: 3000
+          });
         }
     }
 </script>
 
 <template>
     <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <Toast />
+
         <Card class="w-full max-w-md p-6 shadow-lg">
           <template #title>
             <h2 class="text-xl font-semibold text-gray-800">Registro</h2>
@@ -46,7 +58,16 @@
               </div>
               <Button label="Ingresar" type="submit" class="w-full mt-4" />
             </form>
+
+            <div class="mt-4 text-center">
+              <router-link to="/forgot-password" class="text-blue-500 hover:underline text-sm">
+                ¿Olvidaste tu contraseña?
+              </router-link>
+            </div>
+
           </template>
         </Card>
+
+        
       </div>
 </template>
